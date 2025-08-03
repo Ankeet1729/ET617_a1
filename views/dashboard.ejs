@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - User Authentication App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            table {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            max-width: 1500px;
+            width: 90%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .quiz-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .content {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .welcome-message {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .username {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .user-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        
+        .user-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-info p {
+            color: #666;
+            margin: 0.25rem 0;
+        }
+        .form-group {
+            text-align: left;
+        }
+        .quiz-options label {
+            display: block;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= title %></h1>
+        
+        <div class="user-info">
+            <h3>Welcome back!</h3>
+            <p><strong>Username:</strong> <span class="username"><%= username %></span></p>
+        </div>
+        
+        <div class="welcome-message">
+            Hello <span class="username"><%= username %></span>! Welcome to your dashboard.
+        </div>
+
+        <div class="content">
+            <h2>Permutations and Combinations – JEE Main & Advanced Summary</h2>
+          
+            <h3>1. Introduction</h3>
+            <p>Permutations and Combinations is a crucial topic in Class 11 Mathematics, forming the foundation for probability and various counting problems in competitive exams like JEE Main and Advanced. It helps determine the number of ways to arrange or select objects.</p>
+          
+            <h3>2. Fundamental Principle of Counting</h3>
+            <ul>
+              <li><strong>Multiplication Principle:</strong> If an operation can be performed in ‘m’ ways and another in ‘n’ ways, both can be done together in m × n ways.</li>
+              <li><strong>Addition Principle:</strong> If one event can occur in m ways and another mutually exclusive event in n ways, either can happen in m + n ways.</li>
+            </ul>
+          
+            <h3>3. Factorial (n!)</h3>
+            <p>n! = n × (n – 1) × (n – 2) × … × 1<br>Example: 4! = 4 × 3 × 2 × 1 = 24</p>
+          
+            <h3>4. Permutations</h3>
+            <p><strong>Permutations</strong> refer to arrangements where the order of elements matters.</p>
+            <ul>
+              <li><strong>Formula:</strong> nP<sub>r</sub> = n! / (n – r)!</li>
+              <li><strong>Example:</strong> Number of ways to arrange 3 people from a group of 5: 5P3 = 5! / (5–3)! = 60</li>
+            </ul>
+          
+            <h4>Special Cases:</h4>
+            <ul>
+              <li>All n objects: n!</li>
+              <li>Some objects are identical: n! / (p! × q! × …)</li>
+              <li>Permutations with repetition: n<sup>r</sup> if r objects are chosen from n and repetition is allowed</li>
+            </ul>
+          
+            <h3>5. Circular Permutations</h3>
+            <ul>
+              <li><strong>Clockwise arrangements:</strong> (n – 1)!</li>
+              <li><strong>If no fixed direction:</strong> (n – 1)! / 2</li>
+            </ul>
+          
+            <h3>6. Combinations</h3>
+            <p><strong>Combinations</strong> refer to selections where order doesn’t matter.</p>
+            <ul>
+              <li><strong>Formula:</strong> nC<sub>r</sub> = n! / [r!(n – r)!]</li>
+              <li><strong>Example:</strong> Ways to choose 2 people out of 5: 5C2 = 10</li>
+            </ul>
+          
+            <h4>Properties:</h4>
+            <ul>
+              <li>nC<sub>r</sub> = nC<sub>n–r</sub></li>
+              <li>nC<sub>0</sub> = nC<sub>n</sub> = 1</li>
+              <li>nC<sub>r</sub> + nC<sub>r–1</sub> = n+1C<sub>r</sub> (Pascal’s identity)</li>
+            </ul>
+          
+            <h3>7. Mixed Problems</h3>
+            <ul>
+              <li>Choosing teams (combinations)</li>
+              <li>Assigning seats or arranging people (permutations)</li>
+              <li>Forming numbers from digits</li>
+              <li>Selecting committees under constraints</li>
+            </ul>
+          
+            <h3>8. Pigeonhole Principle</h3>
+            <p>If more than n items are put into n containers, at least one container must contain more than one item.</p>
+            <p><strong>Example:</strong> Among 13 people, at least two share a birth month (12 months).</p>
+          
+            <h3>9. Multinomial Theorem (Advanced)</h3>
+            <p>Generalization of binomial theorem for more than 2 terms:<br>
+            (x₁ + x₂ + … + x<sub>k</sub>)ⁿ = ∑ [n! / (r₁! r₂! … r<sub>k</sub>!)] × x₁<sup>r₁</sup> x₂<sup>r₂</sup> … x<sub>k</sub><sup>r<sub>k</sub></sup><br>
+            where r₁ + r₂ + … + r<sub>k</sub> = n</p>
+          
+            <h3>10. Common JEE Patterns</h3>
+            <ul>
+              <li>Words with/without repetition</li>
+              <li>Numbers from digits with even/odd constraints</li>
+              <li>Committee formation with specific conditions</li>
+              <li>Rank of a word in dictionary order</li>
+              <li>Favorable cases vs total cases for probability</li>
+            </ul>
+          
+            <h3>11. Common Pitfalls</h3>
+            <ul>
+              <li>Not considering whether repetition is allowed</li>
+              <li>Confusing permutations with combinations</li>
+              <li>Forgetting to divide by factorials for identical objects</li>
+              <li>Overcounting or undercounting cases in constrained problems</li>
+            </ul>
+          
+            <h3>12. Summary Table</h3>
+            <table border="1" cellpadding="6">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Order Matters</th>
+                  <th>Repetition Allowed</th>
+                  <th>Formula</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Permutation</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>nP<sub>r</sub> = n! / (n – r)!</td>
+                </tr>
+                <tr>
+                  <td>Permutation</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>n<sup>r</sup></td>
+                </tr>
+                <tr>
+                  <td>Combination</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>nC<sub>r</sub> = n! / (r!(n – r)!)</td>
+                </tr>
+                <tr>
+                  <td>Combination</td>
+                  <td>No</td>
+                  <td>Yes</td>
+                  <td>(n + r – 1)C<sub>r</sub></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+
+          <div class="content">
+          <div class="video-container" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;margin:2rem 0;">
+            <iframe
+                src="https://www.youtube.com/embed/LbQniULPiS0"
+                title="Combinations and Permutations Explained"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position:absolute;top:0;left:0;width:100%;height:100%;">
+            </iframe>
+          </div>
+          </div>
+
+          <div class="quiz-section" style="margin-top:2rem;">
+            <h2>Quick Quiz: Permutations & Combinations</h2>
+            <form id="permutationQuiz" style="max-width:500px;margin:auto;">
+              <div class="form-group" style="margin-bottom:1rem;">
+                <label><strong>1.</strong> How many ways can 3 books be arranged on a shelf?</label>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q1" value="4"> 4</label>
+                  <label><input type="radio" name="q1" value="6"> 6</label>
+                  <label><input type="radio" name="q1" value="8"> 8</label>
+                  <label><input type="radio" name="q1" value="9"> 9</label>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:1rem;">
+                <label><strong>2.</strong> What is the value of 5P2?</label>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q2" value="10"> 10</label>
+                  <label><input type="radio" name="q2" value="20"> 20</label>
+                  <label><input type="radio" name="q2" value="30"> 30</label>
+                  <label><input type="radio" name="q2" value="60"> 60</label>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:1rem;">
+                <label><strong>3.</strong> If you have 4 different colored balls, in how many ways can you arrange all of them in a row?</label>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q3" value="12"> 12</label>
+                  <label><input type="radio" name="q3" value="16"> 16</label>
+                  <label><input type="radio" name="q3" value="24"> 24</label>
+                  <label><input type="radio" name="q3" value="32"> 32</label>
+                </div>
+              </div>
+              <div class="form-group" style="margin-bottom:1rem;">
+                <label><strong>4.</strong> In how many ways can a committee of 2 be chosen from 5 people?</label>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q4" value="5"> 5</label>
+                  <label><input type="radio" name="q4" value="10"> 10</label>
+                  <label><input type="radio" name="q4" value="20"> 20</label>
+                  <label><input type="radio" name="q4" value="25"> 25</label>
+                </div>
+              </div>
+              <button type="submit" class="btn" style="margin-top:1rem;">Submit Answers</button>
+              <div id="quizResult" style="margin-top:1rem;font-weight:bold;"></div>
+            </form>
+          </div>
+        
+        <a href="/logout" class="btn">Logout</a>
+    </div>
+
+
+<script>
+  document.getElementById('permutationQuiz').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Correct answers:
+    // Q1: 6 (3! = 6)
+    // Q2: 20 (5P2 = 5*4 = 20)
+    // Q3: 24 (4! = 24)
+    // Q4: 10 (5C2 = 10)
+    const answers = {
+      q1: '6',
+      q2: '20',
+      q3: '24',
+      q4: '10'
+    };
+    let score = 0;
+    let total = 4;
+    const userAnswers = [
+      document.querySelector('input[name="q1"]:checked') ? document.querySelector('input[name="q1"]:checked').value : '',
+      document.querySelector('input[name="q2"]:checked') ? document.querySelector('input[name="q2"]:checked').value : '',
+      document.querySelector('input[name="q3"]:checked') ? document.querySelector('input[name="q3"]:checked').value : '',
+      document.querySelector('input[name="q4"]:checked') ? document.querySelector('input[name="q4"]:checked').value : ''
+    ];
+    if (userAnswers[0] === answers.q1) score++;
+    if (userAnswers[1] === answers.q2) score++;
+    if (userAnswers[2] === answers.q3) score++;
+    if (userAnswers[3] === answers.q4) score++;
+    let resultDiv = document.getElementById('quizResult');
+    if (score === total) {
+      resultDiv.style.color = '#155724';
+      resultDiv.textContent = `Great job! You got all ${total} correct! 🎉`;
+    } else {
+      resultDiv.style.color = '#721c24';
+      resultDiv.textContent = `You got ${score} out of ${total} correct. Try again!`;
+    }
+  });
+</script>
+</body>
+</html> 
