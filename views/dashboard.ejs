@@ -282,7 +282,9 @@
                     if (event.data === YT.PlayerState.PAUSED) {
                       stopVideo();
                     }
-                    
+                    if (event.data === YT.PlayerState.ENDED) {
+                      endVideo();
+                    }
                   }
                 }
               });
@@ -306,6 +308,16 @@
                 },
                 body: JSON.stringify({ event_type: 'pause', target_type: 'video', target_id: 1 })
               })
+            }
+
+            function endVideo() {
+              fetch('/track', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ event_type: 'end', target_type: 'video', target_id: 1 })
+              });
             }
           </script>
           

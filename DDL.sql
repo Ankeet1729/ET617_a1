@@ -15,5 +15,5 @@ CREATE TABLE events (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (username) REFERENCES users(username),
     CHECK (target_type IN ('video', 'quiz')),
-    CHECK (event_type IN ('click', 'view', 'scroll', 'start', 'pause'))
+    CHECK (event_type IN ('click', 'view', 'scroll', 'start', 'pause', 'end'))
 );
