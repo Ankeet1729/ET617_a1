@@ -241,6 +241,30 @@ app.get('/api/user', async (req, res) => {
     }
 });
 
+app.post('/track', express.json(), (req, res) => {
+    const { event_type, target_type, target_id } = req.body;
+    const username = req.session.username;
+    if (!username) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    if (!event_type || !target_type || !target_id) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    const query = `INSERT INTO events (username, event_type, target_type, target_id) VALUES ($1, $2, $3, $4) RETURNING id, created_at`;
+    const values = [username, event_type, target_type, target_id];
+    // console.log('reached');
+
+    pool.query(query, values)
+        .then(result => {
+            res.status(201).json({ success: true, event: result.rows[0] });
+        })
+        .catch(error => {
+            console.error('Error tracking event:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+}); 
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 }); 
