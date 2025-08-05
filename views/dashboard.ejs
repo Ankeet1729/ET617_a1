@@ -370,41 +370,92 @@
     </div>
 
 
-<script>
-  document.getElementById('permutationQuiz').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Correct answers:
-    // Q1: 6 (3! = 6)
-    // Q2: 20 (5P2 = 5*4 = 20)
-    // Q3: 24 (4! = 24)
-    // Q4: 10 (5C2 = 10)
-    const answers = {
-      q1: '6',
-      q2: '20',
-      q3: '24',
-      q4: '10'
-    };
-    let score = 0;
-    let total = 4;
-    const userAnswers = [
-      document.querySelector('input[name="q1"]:checked') ? document.querySelector('input[name="q1"]:checked').value : '',
-      document.querySelector('input[name="q2"]:checked') ? document.querySelector('input[name="q2"]:checked').value : '',
-      document.querySelector('input[name="q3"]:checked') ? document.querySelector('input[name="q3"]:checked').value : '',
-      document.querySelector('input[name="q4"]:checked') ? document.querySelector('input[name="q4"]:checked').value : ''
-    ];
-    if (userAnswers[0] === answers.q1) score++;
-    if (userAnswers[1] === answers.q2) score++;
-    if (userAnswers[2] === answers.q3) score++;
-    if (userAnswers[3] === answers.q4) score++;
-    let resultDiv = document.getElementById('quizResult');
-    if (score === total) {
-      resultDiv.style.color = '#155724';
-      resultDiv.textContent = `Great job! You got all ${total} correct! 🎉`;
-    } else {
-      resultDiv.style.color = '#721c24';
-      resultDiv.textContent = `You got ${score} out of ${total} correct. Try again!`;
+    <script>
+      // Function to send event to backend
+      function sendQuizEvent(action, data = {}) {
+        const payload = {
+          event_type: action,
+          target_type: 'quiz',
+          target_id: 2, 
+          event_data: data
+        };
+    
+        fetch('/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error("Quiz tracking failed:", err));
     }
-  });
-</script>
+    
+      // Track option selection
+      document.querySelectorAll('#permutationQuiz input[type="radio"]').forEach(input => {
+        input.addEventListener('change', function () {
+          sendQuizEvent('option_selected', {
+            question: this.name,
+            selected_value: this.value
+          });
+        });
+      });
+    
+      // Track quiz submission + existing logic
+      document.getElementById('permutationQuiz').addEventListener('submit', function(e) {
+        e.preventDefault();
+    
+        // Correct answers
+        const answers = {
+          q1: '6',
+          q2: '20',
+          q3: '24',
+          q4: '10'
+        };
+    
+        let score = 0;
+        let total = 4;
+        const userAnswers = [
+          document.querySelector('input[name="q1"]:checked')?.value || '',
+          document.querySelector('input[name="q2"]:checked')?.value || '',
+          document.querySelector('input[name="q3"]:checked')?.value || '',
+          document.querySelector('input[name="q4"]:checked')?.value || ''
+        ];
+    
+        if (userAnswers[0] === answers.q1) score++;
+        if (userAnswers[1] === answers.q2) score++;
+        if (userAnswers[2] === answers.q3) score++;
+        if (userAnswers[3] === answers.q4) score++;
+    
+        let resultDiv = document.getElementById('quizResult');
+        if (score === total) {
+          resultDiv.style.color = '#155724';
+          resultDiv.textContent = `Great job! You got all ${total} correct! 🎉`;
+        } else {
+          resultDiv.style.color = '#721c24';
+          resultDiv.textContent = `You got ${score} out of ${total} correct. Try again!`;
+        }
+    
+        // Send quiz submission event to backend
+        sendQuizEvent('quiz_submitted', {
+          user_answers: userAnswers,
+          score: score,
+          total: total
+        });
+      });
+    </script>    
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const payload = {
+          event_type: 'view',
+          target_type: 'page',
+          target_id: 0
+        };
+        console.log("Tracked page view", payload);
+
+        fetch('/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error("Page view tracking failed:", err));
+      });
+    </script>
 </body>
 </html> 

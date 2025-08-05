@@ -242,17 +242,19 @@ app.get('/api/user', async (req, res) => {
 });
 
 app.post('/track', express.json(), (req, res) => {
-    const { event_type, target_type, target_id } = req.body;
+    const { event_type, target_type, target_id, event_data } = req.body;
     const username = req.session.username;
     if (!username) {
         return res.status(401).json({ error: 'Not authenticated' });
     }
-    if (!event_type || !target_type || !target_id) {
+    if (!event_type || !target_type || target_id === undefined) {
+        console.error('Missing required fields for event tracking:', req.body);
         return res.status(400).json({ error: 'Missing required fields' });
     }
     
-    const query = `INSERT INTO events (username, event_type, target_type, target_id) VALUES ($1, $2, $3, $4) RETURNING id, created_at`;
-    const values = [username, event_type, target_type, target_id];
+    const query = `INSERT INTO events (username, event_type, target_type, target_id, event_data) VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at`;
+    const values = [username, event_type, target_type, target_id, event_data || null];
+    // console.log(values);
     // console.log('reached');
 
     pool.query(query, values)

@@ -12,8 +12,11 @@ CREATE TABLE events (
     event_type VARCHAR(50) NOT NULL,
     target_type VARCHAR(50) NOT NULL,
     target_id INT NOT NULL,
+    event_data JSON,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (username) REFERENCES users(username),
-    CHECK (target_type IN ('video', 'quiz')),
-    CHECK (event_type IN ('click', 'view', 'scroll', 'start', 'pause', 'end'))
+    CHECK (target_type IN ('video', 'quiz', 'page')),
+    CHECK (event_type IN ('option_selected', 'quiz_submitted', 'view', 'scroll', 'start', 'pause', 'end'))
 );
+
+
