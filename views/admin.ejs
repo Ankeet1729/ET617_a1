@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - User Authentication App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+        .filters select, .filters input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .filters button {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .filters button:hover {
+            background: #5a6fd8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background: #667eea;
+            color: #fff;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+        }
+        .clear-filters {
+            background: #dc3545;
+        }
+        .clear-filters:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <div class="filters">
+            <select id="eventTypeFilter">
+                <option value="">All Event Types</option>
+                <option value="option_selected">option_selected</option>
+                <option value="quiz_submitted">quiz_submitted</option>
+                <option value="view">view</option>
+                <option value="start">start</option>
+                <option value="pause">pause</option>
+            </select>
+            <input type="text" id="usernameFilter" placeholder="Filter by Username">
+            <button onclick="applyFilters()">Apply Filters</button>
+            <button onclick="clearFilters()" class="clear-filters">Clear Filters</button>
+            <button onclick="refreshData()">Refresh Data</button>
+        </div>
+        <table id="eventsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Event Type</th>
+                    <th>Target Type</th>
+                    <th>Target ID</th>
+                    <th>Event Data</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+        <div class="loading" id="loading" style="display: none;">Loading...</div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        // Store all events data
+        let allEvents = [];
+
+        async function fetchEvents() {
+            try {
+                // Show loading indicator
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('error').textContent = '';
+
+                const response = await fetch('/api/admin/events');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch events');
+                }
+                
+                allEvents = await response.json();
+                
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+                
+                // Display all events initially
+                displayEvents(allEvents);
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').textContent = error.message;
+            }
+        }
+
+        function displayEvents(events) {
+            const tableBody = document.querySelector('#eventsTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            if (events.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="7" style="text-align: center; color: #666;">No events match the current filters</td>';
+                tableBody.appendChild(row);
+                return;
+            }
+
+            events.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.id}</td>
+                    <td>${event.username}</td>
+                    <td>${event.event_type}</td>
+                    <td>${event.target_type || ''}</td>
+                    <td>${event.target_id || ''}</td>
+                    <td>${JSON.stringify(event.event_data)}</td>
+                    <td>${new Date(event.created_at).toLocaleString()}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function applyFilters() {
+            const eventType = document.getElementById('eventTypeFilter').value.toLowerCase();
+            const username = document.getElementById('usernameFilter').value.toLowerCase().trim();
+
+            let filteredEvents = allEvents;
+
+            // Filter by event type
+            if (eventType) {
+                filteredEvents = filteredEvents.filter(event => 
+                    event.event_type.toLowerCase() === eventType
+                );
+            }
+
+            // Filter by username
+            if (username) {
+                filteredEvents = filteredEvents.filter(event => 
+                    event.username.toLowerCase().includes(username)
+                );
+            }
+
+            displayEvents(filteredEvents);
+        }
+
+        function clearFilters() {
+            // Reset filter inputs
+            document.getElementById('eventTypeFilter').value = '';
+            document.getElementById('usernameFilter').value = '';
+            
+            // Display all events
+            displayEvents(allEvents);
+        }
+
+        function refreshData() {
+            // Clear filters and fetch fresh data
+            clearFilters();
+            fetchEvents();
+        }
+
+        // Add event listeners for real-time filtering
+        document.getElementById('eventTypeFilter').addEventListener('change', applyFilters);
+        document.getElementById('usernameFilter').addEventListener('input', applyFilters);
+
+        // Fetch events on page load
+        document.addEventListener('DOMContentLoaded', fetchEvents);
+    </script>
+</body>
+</html>

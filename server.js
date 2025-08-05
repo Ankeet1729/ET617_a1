@@ -160,6 +160,21 @@ app.get('/dashboard', async (req, res) => {
     }
 });
 
+app.get('/admin', (req, res) => {
+    if (!req.session.username) {
+        return res.redirect('/login');
+    }
+    if (req.session.username !== 'admin') {
+        return res.status(403).send('Access denied');
+    }
+    
+    res.render('admin', { 
+        title: 'Admin Dashboard',
+        username: req.session.username
+    });
+}
+);
+
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
@@ -240,6 +255,21 @@ app.get('/api/user', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+app.get('/api/admin/events', async (req, res) => {
+    if (!req.session.username && req.session.username !== 'admin') {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    
+    try {
+        const result = await pool.query('SELECT * FROM events');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error running query:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+);
 
 app.post('/track', express.json(), (req, res) => {
     const { event_type, target_type, target_id, event_data } = req.body;
