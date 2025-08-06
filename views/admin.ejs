@@ -161,8 +161,8 @@
                     <td>${event.id}</td>
                     <td>${event.username}</td>
                     <td>${event.event_type}</td>
-                    <td>${event.target_type || ''}</td>
-                    <td>${event.target_id || ''}</td>
+                    <td>${event.target_type}</td>
+                    <td>${event.target_id}</td>
                     <td>${JSON.stringify(event.event_data)}</td>
                     <td>${new Date(event.created_at).toLocaleString()}</td>
                 `;
